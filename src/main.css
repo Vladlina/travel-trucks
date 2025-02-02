@@ -1,5 +1,6 @@
 /* Reset styles */
-@import url('/node_modules/modern-normalize/modern-normalize.css');
+
+@import url("/node_modules/modern-normalize/modern-normalize.css");
 h1,
 h2,
 h3,
@@ -43,7 +44,7 @@ select {
   color: inherit;
 }
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   color: rgb(247, 247, 247);
 }
 .react-datepicker-wrapper {
