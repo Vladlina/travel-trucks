@@ -1,4 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
+import favoriteTrucksSlice from './favoriteTrucksSlice';
+import trucksSlice from './trucksSlice';
 
 import {
   persistStore,
@@ -9,29 +11,43 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import campersReducer from "./campers/slice.js";
-import filtersReducer from "./filters/slice.js";
-import favouritesReducer from "./favourites/slice.js";
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+import filterTrucksSlice from './filterTrucksSlice';
 
-const filtersPersistConfig = {
-  key: "filters",
+const favoriteTrucksConfig = {
+  key: 'favoriteTrucks',
   storage,
+  whitelist: ['favoriteTrucks'],
 };
 
-const favouritesPersistConfig = {
-  key: "favourites",
+const trucksSliceConfig = {
+  key: 'trucks',
   storage,
+  whitelist: ['trucks'],
 };
+
+const filterConfig = {
+  key: 'filters',
+  storage,
+  whitelist: ['filters'],
+};
+
+const pFilterConfig = persistReducer(filterConfig, filterTrucksSlice);
+
+const pFavoriteTrucksConfig = persistReducer(
+  favoriteTrucksConfig,
+  favoriteTrucksSlice
+);
+const pTrucksConfig = persistReducer(trucksSliceConfig, trucksSlice);
 
 export const store = configureStore({
   reducer: {
-    campers: campersReducer,
-    filters: persistReducer(filtersPersistConfig, filtersReducer),
-    favourites: persistReducer(favouritesPersistConfig, favouritesReducer),
+    favoriteTrucks: pFavoriteTrucksConfig,
+    trucks: pTrucksConfig,
+    filters: pFilterConfig,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
